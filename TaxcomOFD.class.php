@@ -30,7 +30,7 @@ class TaxComOFD {
 /*
 Debug function returns printed arrays of each function.
 */
-	var $Debug = true; 
+	var $Debug = false; 
 	    public function TaxcomDebug($message) {
         if ($this->Debug) {     	
             print_r($message);
