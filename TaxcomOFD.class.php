@@ -30,11 +30,12 @@ class TaxComOFD {
 /*
 Debug function returns printed arrays of each function.
 */
-	var $Debug = false; 
+	var $Debug = false;
+	var $Decode = true; 
 	    public function TaxcomDebug($message) {
         if ($this->Debug) {     	
             print_r($message);
-            echo '<br>';
+            //echo '<br>';
         }
     }
     
@@ -45,6 +46,7 @@ Debug function returns printed arrays of each function.
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Session-Token:'.$TaxcomSessionToken));
     $result = curl_exec($ch);
     curl_close($ch);
+    if ($this->Decode)
     $result = json_decode($result, true);
     return $result;
     }
@@ -164,14 +166,14 @@ Debug function returns printed arrays of each function.
 }
 //2.7.4.1. Печать документа в HTML-формате
 	public function TaxcomPrintDocumenthtml($TaxcomSessionToken, $kktId, $fp) {
-		$url = 'https://api-lk-ofd.taxcom.ru/API/v2/PrintDocument/html?fn='.$kktId.'&fd='.$fp;
+		$url = 'https://api-lk-ofd.taxcom.ru/API/v2/PrintDocument/html?kktId='.$kktId.'&fp='.$fp;
     $result = $this->TaxcomCurl($url, $TaxcomSessionToken);
     $this->TaxcomDebug($result);
   	return ($result);
 }
 //2.7.4.2. Печать документа в PDF-формате
 	public function TaxcomPrintDocumentpdf($TaxcomSessionToken, $kktId, $fp) {
-		$url = 'https://api-lk-ofd.taxcom.ru/API/v2/PrintDocument/pdf?fn='.$kktId.'&fd='.$fp;
+		$url = 'https://api-lk-ofd.taxcom.ru/API/v2/PrintDocument/pdf?kktId='.$kktId.'&fp='.$fp;
 		$result = $this->TaxcomCurl($url, $TaxcomSessionToken);
     $this->TaxcomDebug($result);
   	return ($result);
@@ -180,4 +182,12 @@ Debug function returns printed arrays of each function.
 2.8, 2.9, 2.10
 Not implemented, due to security risk.
 */
+
+//4.1 Новые документы
+	public function TaxcomNewDocuments($TaxcomSessionToken, $an=false, $id=false) {
+		$url = 'https://api-lk-ofd.taxcom.ru/API/v2/NewDocuments?'.(!$an?'':'&an='.$an).(!$id?'':'&id='.$id);
+    $result = $this->TaxcomCurl($url, $TaxcomSessionToken);
+    $this->TaxcomDebug($result);
+  	return ($result);
+}
 }
