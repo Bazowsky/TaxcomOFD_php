@@ -2,24 +2,24 @@
 /*****************************
  *
  * TaxCom OFD PHP API class v2.0
- * Author: Alex Bazowsky 
+ * Author: Alex Bazowsky
  * alexbazowsky@gmail.com
  *
  * https://github.com/Bazowsky/TaxcomOFD_php
  * https://lk-ofd.taxcom.ru
- * 
+ *
  ******************************/
- 
+
 	/*
 	https://lk-ofd.taxcom.ru/ApiHelp/
-	Для получения ID интегратора, требующегося для доступа к методам API, 
+	Для получения ID интегратора, требующегося для доступа к методам API,
 	необходимо обратиться с соответствующим запросом в техническую поддержку компании "Такском".
 	*/
-	
+	// nope
 class TaxComOFD {
-	
+
 	/*
-	Declare Login, Password and IntegratorID inside class variables, 
+	Declare Login, Password and IntegratorID inside class variables,
 	or use put it in the initial auth function every time you need to get session token.
 	This may be useful if you have multiplie logins with rights management, i.e. for view only, for administration etc.
 	*/
@@ -31,14 +31,14 @@ class TaxComOFD {
 Debug function returns printed arrays of each function.
 */
 	var $Debug = false;
-	var $Decode = true; 
+	var $Decode = true;
 	    public function TaxcomDebug($message) {
-        if ($this->Debug) {     	
+        if ($this->Debug) {
             print_r($message);
             //echo '<br>';
         }
     }
-    
+
     public function TaxcomCurl($url, $TaxcomSessionToken) {
     $ch = curl_init($url);
 	  curl_setopt($ch, CURLOPT_HEADER, false);
@@ -50,15 +50,15 @@ Debug function returns printed arrays of each function.
     $result = json_decode($result, true);
     return $result;
     }
-    
+
     /*
     Only login/pass method implemented yet.
     On https://lk-ofd.taxcom.ru/ApiHelp/index.html?2_1_2____.htm it says:
     "При вызове метода новый маркер доступа не создаётся, если не закончился срок действия предыдущего маркера."
-   	But on current version api v2.7 this info is bullshit. TaxcomSessionToken returns as new EVERY time you call this function. 
+   	But on current version api v2.7 this info is bullshit. TaxcomSessionToken returns as new EVERY time you call this function.
    	Just remember this, if you store it somewhere...
     */
-//2.1.2. Логин и пароль 
+//2.1.2. Логин и пароль
 	public function TaxcomAuth($Login=false, $Password=false, $IntegratorID=false) {
     $url = 'https://api-lk-ofd.taxcom.ru/API/v2/Login';
     $jsonData='{"login": "'.(!$Login?$this->Login:$Login).'", "password" : "'.(!$Password?$this->Password:$Password).'" }';
